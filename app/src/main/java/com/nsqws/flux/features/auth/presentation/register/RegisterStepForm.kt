@@ -16,8 +16,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.features.auth.presentation.AuthState
-import com.nsqws.flux.features.auth.presentation.components.FluxTextFieldComponent
+import com.nsqws.flux.core.presentation.FluxTextField
 import com.nsqws.flux.R
+import com.nsqws.flux.core.presentation.FluxButton
 import com.nsqws.flux.features.auth.presentation.utils.RutVisualTransformation
 import com.nsqws.flux.features.auth.domain.isRealisticRut
 import com.nsqws.flux.features.auth.domain.isValidEmail
@@ -40,7 +41,7 @@ fun RegisterStepForm(
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(text = "Registro", style = MaterialTheme.typography.headlineLarge)
 
-        FluxTextFieldComponent(
+        FluxTextField(
             value = state.rut,
             onValueChange = { input ->
                 onRutChange(
@@ -70,7 +71,7 @@ fun RegisterStepForm(
                 }
             },
         )
-        FluxTextFieldComponent(
+        FluxTextField(
             value = state.email,
             onValueChange = onEmailChange,
             label = { Text("Correo Electrónico") },
@@ -91,7 +92,7 @@ fun RegisterStepForm(
                 )
             }
         )
-        FluxTextFieldComponent(
+        FluxTextField(
             value = state.password,
             onValueChange = onPasswordChange,
             label = { Text("Contraseña") },
@@ -136,17 +137,16 @@ fun RegisterStepForm(
         if (state.error != null) {
             Text(text = state.error, color = MaterialTheme.colorScheme.error)
         }
+        Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
+        FluxButton(
             onClick = onRegisterClick,
-            modifier = Modifier.fillMaxWidth(),
             enabled = !state.isLoading &&
                     isRealisticRut(state.rut) &&
                     isValidEmail(state.email) &&
-                    isValidPassword(state.password)
-        ) {
-            if (state.isLoading) CircularProgressIndicator(modifier = Modifier.size(24.dp))
-            else Text("Registrarme")
-        }
+                    isValidPassword(state.password),
+            isLoading = state.isLoading,
+            textButton = "Registrarme"
+        )
     }
 }

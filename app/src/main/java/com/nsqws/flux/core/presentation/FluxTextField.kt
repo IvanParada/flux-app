@@ -1,4 +1,4 @@
-package com.nsqws.flux.features.auth.presentation.components
+package com.nsqws.flux.core.presentation
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +10,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun FluxTextFieldComponent(
+fun FluxTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit)?,
@@ -36,7 +36,8 @@ fun FluxTextFieldComponent(
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         isError = isError,
-        supportingText = supportingText
+        supportingText = supportingText,
+        maxLines = 1
 
     )
 }

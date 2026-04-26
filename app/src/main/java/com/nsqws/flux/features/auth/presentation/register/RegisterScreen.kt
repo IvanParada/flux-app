@@ -43,9 +43,6 @@ fun RegisterScreen(
                 onVerifyClick = onVerifyClick
             )
         }
-
-        state.error?.let {
-            Text(text = it, color = MaterialTheme.colorScheme.error)
-        }
+        
     }
 }

@@ -21,7 +21,11 @@ class RecoveryViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     fun onEmailChange(email: String) = _state.update { it.copy(email = email) }
-    fun onCodeChange(code: String) = _state.update { it.copy(code = code) }
+    fun onCodeChange(code: String) {
+        if (code.length <= 6) {
+            _state.update { it.copy(code = code) }
+        }
+    }
     fun onPasswordChange(pass: String) = _state.update { it.copy(password = pass) }
 
     fun handleNext() {

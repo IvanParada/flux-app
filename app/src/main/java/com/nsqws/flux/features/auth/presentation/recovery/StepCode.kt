@@ -1,16 +1,65 @@
 package com.nsqws.flux.features.auth.presentation.recovery
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import com.nsqws.flux.R
+import com.nsqws.flux.core.presentation.FluxButton
+import com.nsqws.flux.features.auth.presentation.AuthState
+import com.nsqws.flux.core.presentation.FluxTextField
 
 @Composable
-fun StepCodeContent(code: String, isLoading: Boolean, onCodeChange: (String) -> Unit, onNext: () -> Unit) {
-    Text("Paso 2: Código", style = MaterialTheme.typography.titleLarge)
-    OutlinedTextField(value = code, onValueChange = onCodeChange, modifier = Modifier.fillMaxWidth())
-    Button(onClick = onNext, enabled = !isLoading) { Text("Verificar") }
+fun StepCodeContent(
+    state: AuthState,
+    onCodeChange: (String) -> Unit,
+    onNext: () -> Unit
+) {
+    val isCodeError: Boolean = state.error?.isNotEmpty() == true
+
+
+    Text(text = "Verifica tu cuenta", style = MaterialTheme.typography.headlineMedium)
+    Spacer(Modifier.height(10.dp))
+    Text(
+        text = "Enviamos un código a ${state.email}",
+        style = MaterialTheme.typography.bodyMedium,
+        modifier = Modifier.padding(bottom = 24.dp)
+    )
+
+    FluxTextField(
+        value = state.code,
+        onValueChange = onCodeChange,
+        label = { Text("Código de 6 dígitos") },
+        enabled = !state.isLoading,
+        isError = isCodeError,
+        supportingText = {
+            if (isCodeError) {
+                Text("Código inválido")
+            }
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        ),
+        leadingIcon  = {
+            Icon(
+                painter = painterResource(R.drawable.mail),
+                contentDescription = "Email icon"
+            )
+        }
+    )
+    Spacer(modifier = Modifier.height(24.dp))
+    FluxButton(
+        onClick = onNext,
+        enabled = !state.isLoading && state.code.length == 6,
+        isLoading = state.isLoading,
+        textButton = "Verificar"
+    )
 }
