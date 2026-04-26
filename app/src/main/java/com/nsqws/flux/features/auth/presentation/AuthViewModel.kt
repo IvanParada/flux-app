@@ -30,11 +30,6 @@ class AuthViewModel @Inject constructor(
 
     fun register() {
         val currentState = _state.value
-        if (currentState.rut.isBlank() || currentState.email.isBlank()) {
-            _state.update { it.copy(error = "Campos obligatorios vacíos") }
-            return
-        }
-
         _state.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
@@ -43,7 +38,10 @@ class AuthViewModel @Inject constructor(
                 password = currentState.password,
                 rut = currentState.rut
             ).onSuccess {
-                _state.update { it.copy(isLoading = false, isSuccess = true) }
+                _state.update { it.copy(
+                    isLoading = false,
+                    navigateToVerify = true
+                ) }
             }.onFailure { error ->
                 _state.update { it.copy(isLoading = false, error = error.message) }
             }
@@ -66,5 +64,22 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun login(){}
+    fun login() {
+        val currentState = _state.value
+        _state.update { it.copy(isLoading = true, error = null) }
+
+        viewModelScope.launch {
+            repository.login(currentState.email, currentState.password)
+                .onSuccess {
+                    _state.update { it.copy(isLoading = false, isSuccess = true) }
+                }
+                .onFailure { error ->
+                    _state.update { it.copy(isLoading = false, error = error.message) }
+                }
+        }
+    }
+
+    fun resetState() {
+        _state.value = AuthState()
+    }
 }

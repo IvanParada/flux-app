@@ -10,25 +10,27 @@ import com.nsqws.flux.features.auth.presentation.AuthViewModel
 
 @Composable
 fun LoginRoute(
+    viewModel: AuthViewModel = hiltViewModel(),
     onLoginSuccess: () -> Unit,
     onNavigateToRegister: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: AuthViewModel = hiltViewModel()
+    onNavigateToRecovery: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.resetState()
+    }
+
     LaunchedEffect(state.isSuccess) {
-        if (state.isSuccess) {
-            onLoginSuccess()
-        }
+        if (state.isSuccess) onLoginSuccess()
     }
 
     LoginScreen(
         state = state,
-        onRutChange = viewModel::onRutChange,
+        onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
         onLoginClick = viewModel::login,
         onNavigateToRegister = onNavigateToRegister,
-        modifier = modifier
+        onNavigateToRecovery = onNavigateToRecovery
     )
 }

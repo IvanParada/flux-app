@@ -13,8 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nsqws.flux.features.auth.presentation.login.LoginRoute
+import com.nsqws.flux.features.auth.presentation.recovery.RecoveryRoute
 import com.nsqws.flux.features.auth.presentation.register.RegisterRoute
-import com.nsqws.flux.features.auth.presentation.verify.VerifyRoute
 import com.nsqws.flux.ui.theme.FluxTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,23 +43,25 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onNavigateToRegister = {
                                     navController.navigate("register")
+                                },
+                                onNavigateToRecovery = {
+                                    navController.navigate("recovery")
+                                }
+                            )
+                        }
+
+                        composable("recovery") {
+                            RecoveryRoute(
+                                onNavigateToLogin = {
+                                    navController.navigate("login") {
+                                        popUpTo("recovery") { inclusive = true }
+                                    }
                                 }
                             )
                         }
 
                         composable("register") {
                             RegisterRoute(
-                                onNavigateToVerify = { email ->
-                                    navController.navigate("verify/$email")
-                                }
-                            )
-                        }
-
-                        composable("verify/{email}") { backStackEntry ->
-                            val email = backStackEntry.arguments?.getString("email") ?: ""
-
-                            VerifyRoute(
-                                email = email,
                                 onNavigateToLogin = {
                                     navController.navigate("login") {
                                         popUpTo("register") { inclusive = true }

@@ -1,9 +1,8 @@
-package com.nsqws.flux.features.auth.presentation.verify
+package com.nsqws.flux.features.auth.presentation.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,17 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.features.auth.presentation.AuthState
 
+
 @Composable
-fun VerifyScreen(
+fun RegisterStepVerify(
     state: AuthState,
     onCodeChange: (String) -> Unit,
-    onVerifyClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onVerifyClick: () -> Unit
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(text = "Verifica tu cuenta", style = MaterialTheme.typography.headlineMedium)
         Text(

@@ -1,16 +1,14 @@
-package com.nsqws.flux.features.auth.presentation.register
+package com.nsqws.flux.features.auth.presentation.recovery
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.nsqws.flux.features.auth.presentation.AuthViewModel
-
 @Composable
-fun RegisterRoute(
+fun RecoveryRoute(
     onNavigateToLogin: () -> Unit,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: RecoveryViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -18,13 +16,11 @@ fun RegisterRoute(
         if (state.isSuccess) onNavigateToLogin()
     }
 
-    RegisterScreen(
+    RecoveryScreen(
         state = state,
-        onRutChange = viewModel::onRutChange,
         onEmailChange = viewModel::onEmailChange,
-        onPasswordChange = viewModel::onPasswordChange,
         onCodeChange = viewModel::onCodeChange,
-        onRegisterClick = viewModel::register,
-        onVerifyClick = viewModel::verify
+        onPasswordChange = viewModel::onPasswordChange,
+        onNext = viewModel::handleNext
     )
 }
