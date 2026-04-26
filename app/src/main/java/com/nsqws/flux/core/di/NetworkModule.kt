@@ -1,6 +1,6 @@
 package com.nsqws.flux.core.di
 
-import com.nsqws.flux.features.auth.data.remote.AuthApi
+import com.nsqws.flux.features.auth.data.api.AuthApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
