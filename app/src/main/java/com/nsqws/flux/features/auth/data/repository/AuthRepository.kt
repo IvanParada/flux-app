@@ -1,6 +1,8 @@
 package com.nsqws.flux.features.auth.data.repository
 
+import com.nsqws.flux.core.data.local.TokenManager
 import com.nsqws.flux.features.auth.data.datasource.AuthRemoteDataSource
+import com.nsqws.flux.features.auth.data.datasource.dto.LoginResponse
 import com.nsqws.flux.features.auth.data.models.ForgotPasswordRequest
 import com.nsqws.flux.features.auth.data.models.LoginRequest
 import com.nsqws.flux.features.auth.data.models.RegisterRequest
@@ -11,7 +13,8 @@ import com.nsqws.flux.features.auth.data.models.VerifyResetCodeRequest
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
-    private val remoteDataSource: AuthRemoteDataSource
+    private val remoteDataSource: AuthRemoteDataSource,
+    private val tokenManager: TokenManager
 ) : IAuthRepository {
 
     private fun getErrorMessage(response: retrofit2.Response<*>): String {
@@ -46,10 +49,15 @@ class AuthRepository @Inject constructor(
     override suspend fun login(email: String, password: String): Result<Unit> {
         return try {
             val response = remoteDataSource.login(LoginRequest(email, password))
+
             if (response.isSuccessful) {
+                val authResponse = response.body()
+                authResponse?.accessToken?.let { token ->
+                    tokenManager.saveToken(token)
+                }
                 Result.success(Unit)
             } else {
-                Result.failure(Exception(getErrorMessage(response)))
+                Result.failure(Exception("Error"))
             }
         } catch (e: Exception) {
             Result.failure(e)

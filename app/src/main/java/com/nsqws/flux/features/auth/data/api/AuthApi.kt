@@ -1,5 +1,6 @@
 package com.nsqws.flux.features.auth.data.api
 
+import com.nsqws.flux.features.auth.data.datasource.dto.LoginResponse
 import com.nsqws.flux.features.auth.data.models.ForgotPasswordRequest
 import com.nsqws.flux.features.auth.data.models.LoginRequest
 import com.nsqws.flux.features.auth.data.models.RegisterRequest
@@ -15,7 +16,7 @@ interface AuthApi {
     @POST("auth/login")
     suspend fun login(
         @Body request: LoginRequest
-    ): Response<Unit>
+    ): Response<LoginResponse>
 
     @POST("auth/register")
     suspend fun register(

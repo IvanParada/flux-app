@@ -1,6 +1,7 @@
 package com.nsqws.flux.features.auth.data.datasource
 
 import com.nsqws.flux.features.auth.data.api.AuthApi
+import com.nsqws.flux.features.auth.data.datasource.dto.LoginResponse
 import com.nsqws.flux.features.auth.data.models.ForgotPasswordRequest
 import com.nsqws.flux.features.auth.data.models.LoginRequest
 import com.nsqws.flux.features.auth.data.models.RegisterRequest
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class AuthRemoteDataSource @Inject constructor(
     private val authApi: AuthApi
 ) {
-    suspend fun login(request: LoginRequest): Response<Unit> {
+    suspend fun login(request: LoginRequest): Response<LoginResponse> {
         return authApi.login(request)
     }
 
