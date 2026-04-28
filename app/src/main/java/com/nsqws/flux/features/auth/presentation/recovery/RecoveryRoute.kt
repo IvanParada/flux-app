@@ -20,7 +20,7 @@ fun RecoveryRoute(
         state = state,
         onEmailChange = viewModel::onEmailChange,
         onCodeChange = viewModel::onCodeChange,
-        onPasswordChange = viewModel::onPasswordChange,
+        onNewPasswordChange = viewModel::onNewPasswordChange,
         onNext = viewModel::handleNext
     )
 }

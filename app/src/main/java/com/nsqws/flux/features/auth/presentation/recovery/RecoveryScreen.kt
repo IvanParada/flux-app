@@ -16,7 +16,7 @@ fun RecoveryScreen(
     state: AuthState,
     onEmailChange: (String) -> Unit,
     onCodeChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
+    onNewPasswordChange: (String) -> Unit,
     onNext: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
@@ -42,7 +42,7 @@ fun RecoveryScreen(
 
             2 -> StepPasswordContent(
                 state = state,
-                onPassChange = onPasswordChange,
+                onNewPasswordChange = onNewPasswordChange,
                 onNext = onNext
             )
         }

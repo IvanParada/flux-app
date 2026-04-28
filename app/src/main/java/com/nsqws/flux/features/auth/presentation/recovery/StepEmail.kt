@@ -30,23 +30,12 @@ fun StepEmailContent(
     FluxTextField(
         value = state.email,
         onValueChange = onEmailChange,
-        label = { Text("Correo Electrónico") },
+        label = "Correo Electrónico",
         enabled = !state.isLoading,
-        isError = showEmailError,
-        supportingText = {
-            if (showEmailError) {
-                Text("Ingrese un correo válido")
-            }
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email
-        ),
-        leadingIcon  = {
-            Icon(
-                painter = painterResource(R.drawable.mail),
-                contentDescription = "Email icon"
-            )
-        }
+        errorText = if (showEmailError) "Ingrese un correo válido" else null,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        leadingIconRes = R.drawable.mail,
+        leadingIconDescription = "Email icon"
     )
     Spacer(modifier = Modifier.height(24.dp))
     FluxButton(

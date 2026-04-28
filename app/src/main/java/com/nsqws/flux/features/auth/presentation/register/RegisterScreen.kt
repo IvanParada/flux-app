@@ -17,6 +17,7 @@ fun RegisterScreen(
     onCodeChange: (String) -> Unit,
     onRegisterClick: () -> Unit,
     onVerifyClick: () -> Unit,
+    onResendCode: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -40,7 +41,8 @@ fun RegisterScreen(
             RegisterStepVerify(
                 state = state,
                 onCodeChange = onCodeChange,
-                onVerifyClick = onVerifyClick
+                onVerifyClick = onVerifyClick,
+                onResendCode = onResendCode
             )
         }
         

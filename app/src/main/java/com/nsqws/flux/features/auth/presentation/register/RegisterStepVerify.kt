@@ -3,37 +3,28 @@ package com.nsqws.flux.features.auth.presentation.register
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.R
 import com.nsqws.flux.core.presentation.FluxButton
 import com.nsqws.flux.features.auth.presentation.AuthState
 import com.nsqws.flux.core.presentation.FluxTextField
-import com.nsqws.flux.features.auth.domain.isRealisticRut
-import com.nsqws.flux.features.auth.domain.isValidEmail
-import com.nsqws.flux.features.auth.domain.isValidPassword
 
 
 @Composable
 fun RegisterStepVerify(
     state: AuthState,
     onCodeChange: (String) -> Unit,
-    onVerifyClick: () -> Unit
+    onVerifyClick: () -> Unit,
+    onResendCode: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,27 +38,17 @@ fun RegisterStepVerify(
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(bottom = 24.dp)
         )
-
         FluxTextField(
             value = state.code,
             onValueChange = onCodeChange,
-            label = { Text("Código de 6 dígitos") },
+            label = "Código de 6 dígitos",
             enabled = !state.isLoading,
-            isError = isCodeError,
-            supportingText = {
-                if (isCodeError) {
-                    Text("Código inválido")
-                }
-            },
+            errorText = if (isCodeError) state.error else null,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             ),
-            leadingIcon  = {
-                Icon(
-                    painter = painterResource(R.drawable.mail),
-                    contentDescription = "Email icon"
-                )
-            }
+            leadingIconRes = R.drawable.mail,
+            leadingIconDescription = "Email icon"
         )
         Spacer(modifier = Modifier.height(24.dp))
         FluxButton(
@@ -75,6 +56,16 @@ fun RegisterStepVerify(
             enabled = !state.isLoading && state.code.length == 6,
             isLoading = state.isLoading,
             textButton = "Verificar"
+        )
+        FluxButton(
+            onClick = onResendCode,
+            enabled = state.isResendEnabled && !state.isLoading,
+            isLoading = state.isLoading,
+            textButton = if (state.isResendEnabled) {
+                "Reenviar código"
+            } else {
+                "Reenviar en ${state.resendCountdown}s"
+            }
         )
 
     }

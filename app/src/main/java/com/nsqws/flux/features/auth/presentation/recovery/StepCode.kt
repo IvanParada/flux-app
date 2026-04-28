@@ -25,7 +25,6 @@ fun StepCodeContent(
 ) {
     val isCodeError: Boolean = state.error?.isNotEmpty() == true
 
-
     Text(text = "Verifica tu cuenta", style = MaterialTheme.typography.headlineMedium)
     Spacer(Modifier.height(10.dp))
     Text(
@@ -33,27 +32,15 @@ fun StepCodeContent(
         style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.padding(bottom = 24.dp)
     )
-
     FluxTextField(
         value = state.code,
         onValueChange = onCodeChange,
-        label = { Text("Código de 6 dígitos") },
+        label = "Código de 6 dígitos",
         enabled = !state.isLoading,
-        isError = isCodeError,
-        supportingText = {
-            if (isCodeError) {
-                Text("Código inválido")
-            }
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number
-        ),
-        leadingIcon  = {
-            Icon(
-                painter = painterResource(R.drawable.mail),
-                contentDescription = "Email icon"
-            )
-        }
+        errorText = if (isCodeError) "Código inválido" else null,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        leadingIconRes = R.drawable.mail,
+        leadingIconDescription = "Email icon"
     )
     Spacer(modifier = Modifier.height(24.dp))
     FluxButton(

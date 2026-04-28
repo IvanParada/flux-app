@@ -25,6 +25,7 @@ fun RegisterRoute(
         onPasswordChange = viewModel::onPasswordChange,
         onCodeChange = viewModel::onCodeChange,
         onRegisterClick = viewModel::register,
-        onVerifyClick = viewModel::verify
+        onVerifyClick = viewModel::verify,
+        onResendCode = viewModel::resendCode
     )
 }

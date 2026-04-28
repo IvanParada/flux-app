@@ -2,6 +2,7 @@ package com.nsqws.flux.features.auth.presentation.recovery
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -26,62 +28,38 @@ import com.nsqws.flux.core.presentation.FluxTextField
 @Composable
 fun StepPasswordContent(
     state: AuthState,
-    onPassChange: (String) -> Unit,
+    onNewPasswordChange: (String) -> Unit,
     onNext: () -> Unit
 ) {
-    val showPasswordError = state.password.isNotBlank() && !isValidPassword(state.password)
+    val showPasswordError = state.newPassword.isNotBlank() && !isValidPassword(state.newPassword)
     var passwordVisible by remember { mutableStateOf(false) }
 
     Text("Ingresa tu nueva contraseña", style = MaterialTheme.typography.headlineMedium)
     Spacer(Modifier.height(10.dp))
     FluxTextField(
-        value = state.password,
-        onValueChange = onPassChange,
-        label = { Text("Contraseña") },
+        value = state.newPassword,
+        onValueChange = onNewPasswordChange,
+        label = "Contraseña",
         enabled = !state.isLoading,
-        isError = showPasswordError,
-        supportingText = {
-            if (showPasswordError) {
-                Text("La contraseña debe tener al menos 8 caracteres")
-            }
-        },
-        visualTransformation =
-            if (passwordVisible) VisualTransformation.None
-            else PasswordVisualTransformation(),
-
-        trailingIcon = {
-            IconButton(
-                onClick = { passwordVisible = !passwordVisible }
-            ) {
-                Icon(
-                    painter = painterResource(
-                        if (passwordVisible)
-                            R.drawable.eye
-                        else
-                            R.drawable.eye_closed
-                    ),
-                    contentDescription = if (passwordVisible)
-                        "Ocultar contraseña"
-                    else
-                        "Mostrar contraseña"
-                )
-            }
-        },
-        leadingIcon  = {
-            Icon(
-                painter = painterResource(R.drawable.password),
-                contentDescription = "Password icon"
-            )
+        errorText = if (showPasswordError)
+            "La contraseña debe tener al menos 8 caracteres"
+        else null,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        leadingIconRes = R.drawable.password,
+        leadingIconDescription = "Password icon",
+        isPassword = true,
+        passwordVisible = passwordVisible,
+        onPasswordVisibilityChange = {
+            passwordVisible = !passwordVisible
         }
     )
-
     if (state.error != null) {
         Text(text = state.error, color = MaterialTheme.colorScheme.error)
     }
     Spacer(modifier = Modifier.height(24.dp))
     FluxButton(
         onClick = onNext,
-        enabled = !state.isLoading && isValidPassword(state.password),
+        enabled = !state.isLoading && isValidPassword(state.newPassword),
         isLoading = state.isLoading,
         textButton = "Finalizar"
     )

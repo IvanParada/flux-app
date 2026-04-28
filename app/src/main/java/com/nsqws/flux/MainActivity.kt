@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nsqws.flux.features.auth.presentation.login.LoginRoute
 import com.nsqws.flux.features.auth.presentation.recovery.RecoveryRoute
 import com.nsqws.flux.features.auth.presentation.register.RegisterRoute
+import com.nsqws.flux.features.auth.presentation.welcome.AuthWelcomeScreen
 import com.nsqws.flux.ui.theme.FluxTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,15 +31,25 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = "login",
+                        startDestination = "welcome",
                         modifier = Modifier.padding(innerPadding)
                     ) {
+                        composable("welcome") {
+                            AuthWelcomeScreen(
+                                onNavigateToLogin = {
+                                    navController.navigate("login")
+                                },
+                                onNavigateToRegister = {
+                                    navController.navigate("register")
+                                }
+                            )
+                        }
 
                         composable("login") {
                             LoginRoute(
                                 onLoginSuccess = {
                                     navController.navigate("home") {
-                                        popUpTo("login") { inclusive = true }
+                                        popUpTo("welcome") { inclusive = true }
                                     }
                                 },
                                 onNavigateToRegister = {
@@ -64,7 +75,7 @@ class MainActivity : ComponentActivity() {
                             RegisterRoute(
                                 onNavigateToLogin = {
                                     navController.navigate("login") {
-                                        popUpTo("register") { inclusive = true }
+                                        popUpTo("welcome")
                                     }
                                 }
                             )

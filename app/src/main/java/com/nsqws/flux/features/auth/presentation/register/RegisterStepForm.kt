@@ -9,11 +9,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.features.auth.presentation.AuthState
 import com.nsqws.flux.core.presentation.FluxTextField
@@ -40,7 +37,6 @@ fun RegisterStepForm(
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(text = "Registro", style = MaterialTheme.typography.headlineLarge)
-
         FluxTextField(
             value = state.rut,
             onValueChange = { input ->
@@ -51,85 +47,46 @@ fun RegisterStepForm(
                     )
                 )
             },
-            label = { Text("RUT") },
+            label = "RUT",
             enabled = !state.isLoading,
-            leadingIcon  = {
-                Icon(
-                    painter = painterResource(R.drawable.credential_user),
-                    contentDescription = "RUT icon"
-                )
-            },
+            leadingIconRes = R.drawable.credential_user,
+            leadingIconDescription = "RUT icon",
             visualTransformation = RutVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 capitalization = KeyboardCapitalization.Characters
             ),
-            isError = showRutError,
-            supportingText = {
-                if (showRutError) {
-                    Text("Ingrese un RUT válido")
-                }
-            },
+            errorText = if (showRutError) "Ingrese un RUT válido" else null
         )
         FluxTextField(
             value = state.email,
             onValueChange = onEmailChange,
-            label = { Text("Correo Electrónico") },
+            label = "Correo Electrónico",
             enabled = !state.isLoading,
-            isError = showEmailError,
-            supportingText = {
-                if (showEmailError) {
-                    Text("Ingrese un correo válido")
-                }
-            },
+            errorText = if (showEmailError) "Ingrese un correo válido" else null,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
             ),
-            leadingIcon  = {
-                Icon(
-                    painter = painterResource(R.drawable.mail),
-                    contentDescription = "Email icon"
-                )
-            }
+            leadingIconRes = R.drawable.mail,
+            leadingIconDescription = "Email icon"
         )
         FluxTextField(
             value = state.password,
             onValueChange = onPasswordChange,
-            label = { Text("Contraseña") },
+            label = "Contraseña",
             enabled = !state.isLoading,
-            isError = showPasswordError,
-            supportingText = {
-                if (showPasswordError) {
-                    Text("La contraseña debe tener al menos 8 caracteres")
-                }
-            },
-            visualTransformation =
-                if (passwordVisible) VisualTransformation.None
-                else PasswordVisualTransformation(),
-
-            trailingIcon = {
-                IconButton(
-                    onClick = { passwordVisible = !passwordVisible }
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            if (passwordVisible)
-                                R.drawable.eye
-                            else
-                                R.drawable.eye_closed
-                        ),
-                        contentDescription = if (passwordVisible)
-                            "Ocultar contraseña"
-                        else
-                            "Mostrar contraseña"
-                    )
-                }
-            },
-            leadingIcon  = {
-                Icon(
-                    painter = painterResource(R.drawable.password),
-                    contentDescription = "Password icon"
-                )
+            errorText = if (showPasswordError)
+                "La contraseña debe tener al menos 8 caracteres"
+            else null,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            leadingIconRes = R.drawable.password,
+            leadingIconDescription = "Password icon",
+            isPassword = true,
+            passwordVisible = passwordVisible,
+            onPasswordVisibilityChange = {
+                passwordVisible = !passwordVisible
             }
         )
 

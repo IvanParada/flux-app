@@ -14,19 +14,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecoveryViewModel @Inject constructor(
-    private val repository: AuthRepository // Tu repo debe tener los métodos de recovery
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())
     val state = _state.asStateFlow()
 
-    fun onEmailChange(email: String) = _state.update { it.copy(email = email) }
+    fun onEmailChange(email: String) =
+        _state.update { it.copy(email = email) }
+
     fun onCodeChange(code: String) {
         if (code.length <= 6) {
             _state.update { it.copy(code = code) }
         }
     }
-    fun onPasswordChange(pass: String) = _state.update { it.copy(password = pass) }
+
+    fun onNewPasswordChange(pass: String) =
+        _state.update { it.copy(newPassword = pass) }
 
     fun handleNext() {
         when (_state.value.recoveryStep) {
@@ -37,26 +41,83 @@ class RecoveryViewModel @Inject constructor(
     }
 
     private fun sendCode() {
+        val currentState = _state.value
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            delay(1000)
-            _state.update { it.copy(isLoading = false, recoveryStep = 1) }
+            _state.update { it.copy(isLoading = true, error = null) }
+
+            repository.forgotPassword(currentState.email)
+                .onSuccess {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            recoveryStep = 1
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            error = error.message
+                        )
+                    }
+                }
         }
     }
 
     private fun verifyCode() {
+        val currentState = _state.value
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            delay(1000)
-            _state.update { it.copy(isLoading = false, recoveryStep = 2) }
+            _state.update { it.copy(isLoading = true, error = null) }
+
+            repository.verifyResetCode(
+                email = currentState.email,
+                code = currentState.code
+            ).onSuccess {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        recoveryStep = 2
+                    )
+                }
+            }.onFailure { error ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = error.message
+                    )
+                }
+            }
         }
     }
 
     private fun resetPassword() {
+        val currentState = _state.value
+
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-            delay(1000)
-            _state.update { it.copy(isLoading = false, isSuccess = true) }
+            _state.update { it.copy(isLoading = true, error = null) }
+
+            repository.resetPassword(
+                email = currentState.email,
+                code = currentState.code,
+                newPassword = currentState.newPassword
+            ).onSuccess {
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        isSuccess = true
+                    )
+                }
+            }.onFailure { error ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        error = error.message
+                    )
+                }
+            }
         }
     }
 }
