@@ -1,10 +1,10 @@
-package com.nsqws.flux.features.auth.data.datasource.dto
+package com.nsqws.flux.features.auth.data.remote.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginResponse(
+data class LoginResponseDto(
     @SerialName("token")
     val accessToken: String,
 

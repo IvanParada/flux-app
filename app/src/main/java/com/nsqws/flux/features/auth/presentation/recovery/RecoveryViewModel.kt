@@ -2,10 +2,9 @@ package com.nsqws.flux.features.auth.presentation.recovery
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nsqws.flux.features.auth.data.repository.AuthRepository
+import com.nsqws.flux.features.auth.data.repository.AuthRepositoryImpl
 import com.nsqws.flux.features.auth.presentation.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecoveryViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepositoryImpl
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())

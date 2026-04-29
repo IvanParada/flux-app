@@ -17,9 +17,9 @@ import com.nsqws.flux.core.presentation.FluxTextField
 import com.nsqws.flux.R
 import com.nsqws.flux.core.presentation.FluxButton
 import com.nsqws.flux.features.auth.presentation.utils.RutVisualTransformation
-import com.nsqws.flux.features.auth.domain.isRealisticRut
-import com.nsqws.flux.features.auth.domain.isValidEmail
-import com.nsqws.flux.features.auth.domain.isValidPassword
+import com.nsqws.flux.features.auth.domain.validator.isRealisticRut
+import com.nsqws.flux.features.auth.domain.validator.isValidEmail
+import com.nsqws.flux.features.auth.domain.validator.isValidPassword
 import com.nsqws.flux.features.auth.presentation.utils.sanitizeRutInput
 
 @Composable

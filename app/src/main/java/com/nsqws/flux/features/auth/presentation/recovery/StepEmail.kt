@@ -3,18 +3,16 @@ package com.nsqws.flux.features.auth.presentation.recovery
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.R
 import com.nsqws.flux.core.presentation.FluxButton
 import com.nsqws.flux.core.presentation.FluxTextField
-import com.nsqws.flux.features.auth.domain.isValidEmail
+import com.nsqws.flux.features.auth.domain.validator.isValidEmail
 import com.nsqws.flux.features.auth.presentation.AuthState
 
 @Composable

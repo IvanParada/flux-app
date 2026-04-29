@@ -1,4 +1,4 @@
-package com.nsqws.flux.features.auth.domain
+package com.nsqws.flux.features.auth.domain.validator
 
 
 import android.util.Patterns

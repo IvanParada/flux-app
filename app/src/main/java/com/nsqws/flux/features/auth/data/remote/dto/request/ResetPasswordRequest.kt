@@ -1,4 +1,4 @@
-package com.nsqws.flux.features.auth.data.models
+package com.nsqws.flux.features.auth.data.remote.dto.request
 
 
 import kotlinx.serialization.SerialName

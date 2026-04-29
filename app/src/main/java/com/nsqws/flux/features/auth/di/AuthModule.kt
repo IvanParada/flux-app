@@ -1,7 +1,7 @@
 package com.nsqws.flux.features.auth.di
 
-import com.nsqws.flux.features.auth.data.repository.AuthRepository
-import com.nsqws.flux.features.auth.data.repository.IAuthRepository
+import com.nsqws.flux.features.auth.data.repository.AuthRepositoryImpl
+import com.nsqws.flux.features.auth.domain.repository.AuthRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ abstract class AuthModule {
     @Binds
     @ViewModelScoped
     abstract fun bindAuthRepository(
-        authRepositoryImpl: AuthRepository
-    ): IAuthRepository
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 }

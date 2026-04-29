@@ -2,7 +2,7 @@ package com.nsqws.flux.features.auth.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nsqws.flux.features.auth.data.repository.IAuthRepository
+import com.nsqws.flux.features.auth.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -11,11 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.concurrent.timer
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val repository: IAuthRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AuthState())

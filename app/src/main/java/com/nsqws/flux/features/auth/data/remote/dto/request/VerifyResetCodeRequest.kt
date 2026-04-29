@@ -1,10 +1,12 @@
-package com.nsqws.flux.features.auth.data.models
+package com.nsqws.flux.features.auth.data.remote.dto.request
 
-import kotlinx.serialization.Serializable
+
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Serializable
-data class VerifyRequest(
+data class VerifyResetCodeRequest(
+
     @SerialName("email")
     val email: String,
 
