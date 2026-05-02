@@ -4,107 +4,72 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.nsqws.flux.core.data.local.TokenManager
+import com.nsqws.flux.core.navigation.Graph
+import com.nsqws.flux.core.navigation.Screen
+import com.nsqws.flux.core.presentation.MainContainer
 import com.nsqws.flux.features.auth.presentation.login.LoginRoute
 import com.nsqws.flux.features.auth.presentation.recovery.RecoveryRoute
 import com.nsqws.flux.features.auth.presentation.register.RegisterRoute
 import com.nsqws.flux.features.auth.presentation.welcome.AuthWelcomeScreen
 import com.nsqws.flux.ui.theme.FluxTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var tokenManager: TokenManager
+    @Inject lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             FluxTheme {
-                val navController = rememberNavController()
-                var startDestination by remember { mutableStateOf<String?>(null) }
+                val rootNavController = rememberNavController()
+                val token by tokenManager.token.collectAsState(initial = "loading")
 
-                LaunchedEffect(Unit) {
-                    val token = tokenManager.token.first()
-                    startDestination = if (!token.isNullOrEmpty()) "home" else "welcome"
-                }
-                startDestination?.let { destination ->
-
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                if (token != "loading") {
                     NavHost(
-                        navController = navController,
-                        startDestination = destination,
-                        modifier = Modifier.padding(innerPadding)
+                        navController = rootNavController,
+                        startDestination = if (!token.isNullOrEmpty()) Graph.MAIN else Graph.AUTH,
+                        route = Graph.ROOT
                     ) {
-                        composable("welcome") {
-                            AuthWelcomeScreen(
-                                onNavigateToLogin = {
-                                    navController.navigate("login")
-                                },
-                                onNavigateToRegister = {
-                                    navController.navigate("register")
-                                }
-                            )
+                        navigation(route = Graph.AUTH, startDestination = Screen.Welcome.route) {
+                            composable(Screen.Welcome.route) {
+                                AuthWelcomeScreen(
+                                    onNavigateToLogin = { rootNavController.navigate(Screen.Login.route) },
+                                    onNavigateToRegister = { rootNavController.navigate(Screen.Register.route) }
+                                )
+                            }
+                            composable(Screen.Login.route) {
+                                LoginRoute(
+                                    onLoginSuccess = {
+                                        rootNavController.navigate(Graph.MAIN) {
+                                            popUpTo(Graph.AUTH) { inclusive = true }
+                                        }
+                                    },
+                                    onNavigateToRegister = { rootNavController.navigate(Screen.Register.route) },
+                                    onNavigateToRecovery = { rootNavController.navigate(Screen.Recovery.route) }
+                                )
+                            }
+                            composable(Screen.Register.route) {
+                                RegisterRoute(onNavigateToLogin = { rootNavController.popBackStack() })
+                            }
+                            composable(Screen.Recovery.route) {
+                                RecoveryRoute(onNavigateToLogin = { rootNavController.popBackStack() })
+                            }
                         }
 
-                        composable("login") {
-                            LoginRoute(
-                                onLoginSuccess = {
-                                    navController.navigate("home") {
-                                        popUpTo("welcome") { inclusive = true }
-                                    }
-                                },
-                                onNavigateToRegister = {
-                                    navController.navigate("register")
-                                },
-                                onNavigateToRecovery = {
-                                    navController.navigate("recovery")
-                                }
-                            )
-                        }
-
-                        composable("recovery") {
-                            RecoveryRoute(
-                                onNavigateToLogin = {
-                                    navController.navigate("login") {
-                                        popUpTo("recovery") { inclusive = true }
-                                    }
-                                }
-                            )
-                        }
-
-                        composable("register") {
-                            RegisterRoute(
-                                onNavigateToLogin = {
-                                    navController.navigate("login") {
-                                        popUpTo("welcome")
-                                    }
-                                }
-                            )
-                        }
-
-                        composable("home") {
-                            Text("Soy el Home")
+                        composable(route = Graph.MAIN) {
+                            MainContainer(rootNavController = rootNavController)
                         }
                     }
-                }
                 }
             }
         }
