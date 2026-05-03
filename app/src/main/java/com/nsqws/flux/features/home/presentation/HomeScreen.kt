@@ -1,6 +1,7 @@
 package com.nsqws.flux.features.home.presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -33,6 +36,7 @@ import com.nsqws.flux.features.home.presentation.components.DailyBalanceCard
 import com.nsqws.flux.features.home.presentation.components.HomeHeader
 import com.nsqws.flux.features.home.presentation.components.SmallInfoCard
 import com.nsqws.flux.features.home.presentation.components.TaxPayableCard
+import com.nsqws.flux.ui.theme.AppSuccessColor
 
 
 @Composable
@@ -98,6 +102,46 @@ fun HomeScreen(
                             Text("Ver todo")
                         }
                     }
+                    //TODO: REFACTOR COMPONENT AND ADD SERVICE FOR ITERATE THROUGH LIST OF MOVEMENTS
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        shape = RoundedCornerShape(15.dp),
+                        color = MaterialTheme.colorScheme.surface,
+                        shadowElevation = 1.dp
+                    ){
+                        ListItem(
+                            headlineContent = {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
+                                    Column(
+                                        horizontalAlignment = Alignment.Start
+                                    ){
+                                        Text("Diseño Web - Cliente A", style = typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold))
+                                        Text("10:24", style = typography.bodyMedium.copy(color = MaterialTheme.colorScheme.secondary))
+
+                                    }
+                                    Column(
+                                        horizontalAlignment = Alignment.End
+                                    ){
+                                        Text("+$350.000", style = typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold))
+                                        Text("Pagado")
+                                    }
+                                }
+                            },
+                            leadingContent = {
+                                Icon(
+                                    painter = painterResource(R.drawable.up_broken),
+                                    tint = AppSuccessColor,
+                                    contentDescription = "Localized description",
+                                )
+                            }
+                        )
+                    }
+
                 }
             }
         }
