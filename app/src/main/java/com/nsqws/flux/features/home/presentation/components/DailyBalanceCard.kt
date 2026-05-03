@@ -52,7 +52,7 @@ fun DailyBalanceCard(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Column {
-                    Text("Saldo del Día", style = typography.bodyLarge.copy(color = Color.Gray))
+                    Text("Saldo", style = typography.bodyLarge.copy(color = Color.Gray))
                     Spacer(Modifier.height(12.dp))
                     Row(
                         modifier = Modifier.padding(vertical = 4.dp),
@@ -94,7 +94,7 @@ fun DailyBalanceCard(
             HorizontalDivider(modifier = Modifier.padding(vertical = 20.dp), color = textColor.secondary)
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ){
                 BalanceMetric(
@@ -105,11 +105,6 @@ fun DailyBalanceCard(
                 BalanceMetric(
                     title = "Egresos hoy",
                     amount = "$28.900"
-                )
-                VerticalDivider(modifier = Modifier.height(35.dp), color = textColor.secondary)
-                BalanceMetric(
-                    title = "Pendiente",
-                    amount = "$95.000"
                 )
             }
         }
