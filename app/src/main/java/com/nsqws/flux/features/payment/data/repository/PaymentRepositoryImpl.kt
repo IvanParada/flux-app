@@ -1,0 +1,24 @@
+package com.nsqws.flux.features.payment.data.repository
+import com.nsqws.flux.features.payment.domain.repository.PaymentRepository
+import javax.inject.Inject
+
+class PaymentRepositoryImpl @Inject constructor(
+) : PaymentRepository {
+
+    private fun getErrorMessage(response: retrofit2.Response<*>): String {
+        return try {
+            val errorJson = response.errorBody()?.string()
+
+            if (!errorJson.isNullOrBlank()) {
+                val jsonObject = org.json.JSONObject(errorJson)
+                jsonObject.optString("message", "Error: ${response.code()}")
+            } else {
+                "Error: ${response.code()}"
+            }
+        } catch (e: Exception) {
+            "Error: ${response.code()}"
+        }
+    }
+
+
+}
