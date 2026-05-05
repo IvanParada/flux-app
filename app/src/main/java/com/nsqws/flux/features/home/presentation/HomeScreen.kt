@@ -34,8 +34,12 @@ import com.nsqws.flux.R
 import com.nsqws.flux.features.home.HomeState
 import com.nsqws.flux.features.home.presentation.components.DailyBalanceCard
 import com.nsqws.flux.features.home.presentation.components.HomeHeader
+import com.nsqws.flux.features.home.presentation.components.MovementType
+import com.nsqws.flux.features.home.presentation.components.MovementUi
+import com.nsqws.flux.features.home.presentation.components.RecentMovementsSection
 import com.nsqws.flux.features.home.presentation.components.SmallInfoCard
 import com.nsqws.flux.features.home.presentation.components.TaxPayableCard
+import com.nsqws.flux.ui.theme.AppErrorColor
 import com.nsqws.flux.ui.theme.AppSuccessColor
 
 
@@ -44,6 +48,28 @@ fun HomeScreen(
     state: HomeState
 ) {
     val typography = MaterialTheme.typography
+
+    val sampleMovements = listOf(
+        MovementUi(
+            title = "Diseño Web - Cliente A",
+            time = "10:24",
+            amount = "+$350.000",
+            type = MovementType.Income
+        ),
+        MovementUi(
+            title = "Asesoría UX - Cliente B",
+            time = "09:10",
+            amount = "+$180.000",
+            type = MovementType.Income
+        ),
+        MovementUi(
+            title = "Hosting anual",
+            time = "Ayer",
+            amount = "-$45.000",
+            type = MovementType.Expense
+        )
+    )
+
 
     Scaffold { innerPadding ->
         BoxWithConstraints(
@@ -87,62 +113,12 @@ fun HomeScreen(
                             contentDescription = null
                         )
 
-        }
-                }
-                Column{
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text("Movimientos Recientes", style = typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold))
-                        TextButton(
-                            onClick = {}
-                        ) {
-                            Text("Ver todo")
-                        }
                     }
-                    //TODO: REFACTOR COMPONENT AND ADD SERVICE FOR ITERATE THROUGH LIST OF MOVEMENTS
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        shape = RoundedCornerShape(15.dp),
-                        color = MaterialTheme.colorScheme.surface,
-                        shadowElevation = 1.dp
-                    ){
-                        ListItem(
-                            headlineContent = {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ){
-                                    Column(
-                                        horizontalAlignment = Alignment.Start
-                                    ){
-                                        Text("Diseño Web - Cliente A", style = typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold))
-                                        Text("10:24", style = typography.bodyMedium.copy(color = MaterialTheme.colorScheme.secondary))
-
-                                    }
-                                    Column(
-                                        horizontalAlignment = Alignment.End
-                                    ){
-                                        Text("+$350.000", style = typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold))
-                                        Text("Pagado")
-                                    }
-                                }
-                            },
-                            leadingContent = {
-                                Icon(
-                                    painter = painterResource(R.drawable.up_broken),
-                                    tint = AppSuccessColor,
-                                    contentDescription = "Localized description",
-                                )
-                            }
-                        )
-                    }
-
                 }
+                RecentMovementsSection(
+                    movements = sampleMovements,
+                    onSeeAllClick = {}
+                )
             }
         }
     }

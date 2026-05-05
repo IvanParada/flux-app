@@ -1,6 +1,5 @@
 package com.nsqws.flux.features.auth.data.repository
 
-import androidx.compose.ui.viewinterop.NoOpUpdate
 import com.nsqws.flux.core.data.local.TokenManager
 import com.nsqws.flux.features.auth.data.remote.datasource.AuthRemoteDataSource
 import com.nsqws.flux.features.auth.data.remote.dto.request.ForgotPasswordRequest
@@ -10,13 +9,8 @@ import com.nsqws.flux.features.auth.data.remote.dto.request.ResendCodeRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.ResetPasswordRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyResetCodeRequest
-import com.nsqws.flux.features.auth.data.remote.dto.response.ForgotPasswordResponseDto
-import com.nsqws.flux.features.auth.data.remote.dto.response.LoginResponseDto
-import com.nsqws.flux.features.auth.data.remote.dto.response.RegisterResponseDto
-import com.nsqws.flux.features.auth.data.remote.dto.response.ResendCodeResponseDto
-import com.nsqws.flux.features.auth.data.remote.dto.response.ResetPasswordResponseDto
-import com.nsqws.flux.features.auth.data.remote.dto.response.VerifyResetCodeResponseDto
-import com.nsqws.flux.features.auth.data.remote.dto.response.VerifyResponseDto
+import com.nsqws.flux.features.auth.domain.model.AuthMessage
+import com.nsqws.flux.features.auth.domain.model.AuthSession
 import com.nsqws.flux.features.auth.domain.repository.AuthRepository
 import javax.inject.Inject
 
@@ -40,27 +34,38 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun register(email: String, password: String, rut: String): Result<RegisterResponseDto> {
+    override suspend fun register(
+        email: String,
+        password: String,
+        rut: String
+    ): Result<AuthMessage> {
         return try {
-            val response = remoteDataSource.register(RegisterRequest(email, password, rut))
+            val response = remoteDataSource.register(
+                RegisterRequest(email, password, rut)
+            )
+
             if (response.isSuccessful) {
                 val authResponse = response.body()
 
                 if (authResponse != null) {
-                    Result.success(authResponse)
+                    Result.success(
+                        AuthMessage(message = authResponse.message)
+                    )
                 } else {
                     Result.failure(Exception("Empty body"))
                 }
             } else {
-                val errorMsg = getErrorMessage(response)
-                Result.failure(Exception(errorMsg))
+                Result.failure(Exception(getErrorMessage(response)))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun login(email: String, password: String ): Result<LoginResponseDto> {
+    override suspend fun login(
+        email: String,
+        password: String
+    ): Result<AuthSession> {
         return try {
             val response = remoteDataSource.login(
                 LoginRequest(email, password)
@@ -70,108 +75,135 @@ class AuthRepositoryImpl @Inject constructor(
                 val authResponse = response.body()
 
                 if (authResponse != null) {
-                    authResponse.accessToken.let { token ->
-                        tokenManager.saveToken(token)
-                    }
+                    tokenManager.saveToken(authResponse.accessToken)
 
-                    Result.success(authResponse)
+                    Result.success(
+                        AuthSession(
+                            accessToken = authResponse.accessToken
+                        )
+                    )
                 } else {
                     Result.failure(Exception("Respuesta vacía"))
                 }
             } else {
-                val errorMsg = getErrorMessage(response)
-                Result.failure(Exception(errorMsg))
+                Result.failure(Exception(getErrorMessage(response)))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun verify(email: String, code: String): Result<VerifyResponseDto> {
+    override suspend fun verify(
+        email: String,
+        code: String
+    ): Result<AuthMessage> {
         return try {
-            val response = remoteDataSource.verify(VerifyRequest(email, code))
-
-            if (response.isSuccessful) {
-                val authResponse = response.body()
-
-                if(authResponse != null)
-                    Result.success(authResponse)
-                else
-                    Result.failure(Exception("Empty body"))
-            } else {
-                val errorMsg = getErrorMessage(response)
-                Result.failure(Exception(errorMsg))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun forgotPassword(email: String): Result<ForgotPasswordResponseDto> {
-        return try {
-            val response = remoteDataSource.forgotPassword(ForgotPasswordRequest(email))
-
-            if (response.isSuccessful) {
-                val authResponse = response.body()
-
-                if(authResponse != null)
-                    Result.success(authResponse)
-                else
-                    Result.failure(Exception("Empty body"))
-            } else {
-                val errorMsg = getErrorMessage(response)
-                Result.failure(Exception(errorMsg))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun verifyResetCode(email: String, code: String): Result<VerifyResetCodeResponseDto> {
-        return try {
-            val response = remoteDataSource.verifyResetCode(VerifyResetCodeRequest(email, code))
-
-            if (response.isSuccessful) {
-                val authResponse = response.body()
-
-                if (authResponse != null)
-                    Result.success(authResponse)
-                else
-                    Result.failure(Exception("Empty body"))
-            } else {
-                val errorMsg = getErrorMessage(response)
-                Result.failure(Exception(errorMsg))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-    override suspend fun resetPassword(email: String, code: String, newPassword: String): Result<ResetPasswordResponseDto> {
-        return try {
-            val response = remoteDataSource.resetPassword(
-                ResetPasswordRequest(
-                    email,
-                    code,
-                    newPassword
-                )
+            val response = remoteDataSource.verify(
+                VerifyRequest(email, code)
             )
 
             if (response.isSuccessful) {
                 val authResponse = response.body()
-                if(authResponse != null)
-                    Result.success(authResponse)
-                else
+
+                if (authResponse != null) {
+                    Result.success(
+                        AuthMessage(message = authResponse.message)
+                    )
+                } else {
                     Result.failure(Exception("Empty body"))
+                }
             } else {
-                val errorMsg = getErrorMessage(response)
-                Result.failure(Exception(errorMsg))
+                Result.failure(Exception(getErrorMessage(response)))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun resendCode(email: String): Result<ResendCodeResponseDto> {
+    override suspend fun forgotPassword(
+        email: String
+    ): Result<AuthMessage> {
+        return try {
+            val response = remoteDataSource.forgotPassword(
+                ForgotPasswordRequest(email)
+            )
+
+            if (response.isSuccessful) {
+                val authResponse = response.body()
+
+                if (authResponse != null) {
+                    Result.success(
+                        AuthMessage(message = authResponse.message)
+                    )
+                } else {
+                    Result.failure(Exception("Empty body"))
+                }
+            } else {
+                Result.failure(Exception(getErrorMessage(response)))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun verifyResetCode(
+        email: String,
+        code: String
+    ): Result<AuthMessage> {
+        return try {
+            val response = remoteDataSource.verifyResetCode(
+                VerifyResetCodeRequest(email, code)
+            )
+
+            if (response.isSuccessful) {
+                val authResponse = response.body()
+
+                if (authResponse != null) {
+                    Result.success(
+                        AuthMessage(message = authResponse.message)
+                    )
+                } else {
+                    Result.failure(Exception("Empty body"))
+                }
+            } else {
+                Result.failure(Exception(getErrorMessage(response)))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun resetPassword(
+        email: String,
+        code: String,
+        newPassword: String
+    ): Result<AuthMessage> {
+        return try {
+            val response = remoteDataSource.resetPassword(
+                ResetPasswordRequest(email, code, newPassword)
+            )
+
+            if (response.isSuccessful) {
+                val authResponse = response.body()
+
+                if (authResponse != null) {
+                    Result.success(
+                        AuthMessage(message = authResponse.message)
+                    )
+                } else {
+                    Result.failure(Exception("Empty body"))
+                }
+            } else {
+                Result.failure(Exception(getErrorMessage(response)))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun resendCode(
+        email: String
+    ): Result<AuthMessage> {
         return try {
             val response = remoteDataSource.resendCode(
                 ResendCodeRequest(email)
@@ -179,13 +211,16 @@ class AuthRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) {
                 val authResponse = response.body()
-                if(authResponse != null)
-                    Result.success(authResponse)
-                else
+
+                if (authResponse != null) {
+                    Result.success(
+                        AuthMessage(message = authResponse.message)
+                    )
+                } else {
                     Result.failure(Exception("Empty body"))
+                }
             } else {
-                val errorMsg = getErrorMessage(response)
-                Result.failure(Exception(errorMsg))
+                Result.failure(Exception(getErrorMessage(response)))
             }
         } catch (e: Exception) {
             Result.failure(e)

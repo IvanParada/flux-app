@@ -9,4 +9,5 @@ val AppBackground = Color(0xFFF7F7F7)
 val AppSurface = Color(0xFFFFFFFF)
 
 val AppSuccessColor = Color(0xFF11d796)
+val AppErrorColor = Color(0xFFEF4444)
 

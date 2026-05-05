@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nsqws.flux.core.navigation.Graph
 import com.nsqws.flux.core.navigation.Screen
+import com.nsqws.flux.features.history.presentation.HistoryRoute
 import com.nsqws.flux.features.home.presentation.HomeRoute
 
 @Composable
@@ -79,18 +80,7 @@ fun MainContainer(rootNavController: NavHostController) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) { HomeRoute() }
-            composable(Screen.Ventas.route) {
-                Scaffold { paddingValues ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("Ventas 👋")
-                    }
-                }
-            }
+            composable(Screen.Ventas.route) { HistoryRoute() }
             composable(Screen.Cobrar.route) {
                 Scaffold { paddingValues ->
                     Box(
