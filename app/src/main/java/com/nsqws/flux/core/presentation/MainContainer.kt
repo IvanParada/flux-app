@@ -28,6 +28,7 @@ import com.nsqws.flux.core.navigation.Screen
 import com.nsqws.flux.features.history.presentation.HistoryRoute
 import com.nsqws.flux.features.home.presentation.HomeRoute
 import com.nsqws.flux.features.payment.presentation.PaymentRoute
+import com.nsqws.flux.features.profile.presentation.ProfileRoute
 
 @Composable
 fun MainContainer(rootNavController: NavHostController) {
@@ -83,13 +84,15 @@ fun MainContainer(rootNavController: NavHostController) {
             composable(Screen.Home.route) { HomeRoute() }
             composable(Screen.Ventas.route) { HistoryRoute() }
             composable(Screen.Cobrar.route) { PaymentRoute() }
-            composable(Screen.Perfil.route) {
-                Button(onClick = {
+            composable(Screen.Perfil.route) { ProfileRoute(
+                onLogoutClick = {
                     rootNavController.navigate(Graph.AUTH) {
-                        popUpTo(Graph.MAIN) { inclusive = true }
+                        popUpTo(Graph.MAIN) {
+                            inclusive = true
+                        }
                     }
-                }) { Text("Cerrar Sesión") }
-            }
+                }
+            ) }
         }
     }
 }
