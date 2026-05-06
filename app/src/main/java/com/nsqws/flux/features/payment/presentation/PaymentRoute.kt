@@ -17,6 +17,9 @@ fun PaymentRoute(
         state = state,
         onDigitClick = viewModel::onDigitClick,
         onDeleteClick = viewModel::onDeleteClick,
+        onPaymentMethodSelected = viewModel::onPaymentMethodSelected,
+        onAddDescriptionClick = viewModel::onAddDescriptionClick,
+        onDescriptionChange = viewModel::onDescriptionChange,
     )
 
 }

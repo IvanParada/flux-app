@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.ui)
+    implementation(libs.androidx.compose.foundation.layout)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.retrofit)

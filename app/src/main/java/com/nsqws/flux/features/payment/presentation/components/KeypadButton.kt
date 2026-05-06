@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.R
+import com.nsqws.flux.ui.theme.AppWhite
 
 @Composable
 fun KeypadButton(
@@ -27,9 +29,9 @@ fun KeypadButton(
         modifier = modifier
             .aspectRatio(1.9f)
             .clickable(onClick = onClick),
-        color = MaterialTheme.colorScheme.surface,
-        shape = MaterialTheme.shapes.medium,
-        tonalElevation = 2.dp,
+        color = AppWhite,
+        shape = RoundedCornerShape(15.dp),
+        tonalElevation = 0.dp,
         shadowElevation = 2.dp
     ) {
         Row(

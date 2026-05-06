@@ -34,9 +34,21 @@ class PaymentViewModel @Inject constructor(
         )
     }
 
-    fun onClearClick(){
-        _state.value = _state.value.copy(
-            amount = 0L
+    fun onPaymentMethodSelected(method: PaymentMethodEnum){
+        _state.value = state.value.copy(
+            selectedPaymentMethod = method
+        )
+    }
+
+    fun onAddDescriptionClick() {
+        _state.value = state.value.copy(
+            showDescriptionInput = true
+        )
+    }
+
+    fun onDescriptionChange(value: String) {
+        _state.value = state.value.copy(
+            paymentDescription = value
         )
     }
 

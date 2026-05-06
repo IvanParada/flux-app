@@ -26,13 +26,13 @@ fun AmountKeypad(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .padding(vertical = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         rows.forEach { row ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 row.forEach { key ->
                     if (key.isBlank()) {

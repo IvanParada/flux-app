@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.nsqws.flux.core.utils.toClpAmount
+import com.nsqws.flux.ui.theme.AppSuccessColor
 
 @Composable
 fun AmountEntryHeader(
@@ -25,7 +27,13 @@ fun AmountEntryHeader(
     minHeight: Dp = 260.dp,
     cornerRadius: Dp = 28.dp,
     amount: Long,
+    paymentDescription: String,
+    showDescriptionInput: Boolean,
+    onAddDescriptionClick: () -> Unit,
+    onDescriptionChange: (String) -> Unit,
 ) {
+    val iva = amount * 19 / 100
+    val neto = amount - iva
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -78,7 +86,22 @@ fun AmountEntryHeader(
                 amount = amount,
                 modifier = Modifier.fillMaxWidth()
             )
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ){
+                Text("Neto: $${neto.toClpAmount()}", style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.secondary))
+                Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                Text("IVA: $${iva.toClpAmount()}", style = MaterialTheme.typography.bodyMedium.copy(color = AppSuccessColor))
+            }
+            Spacer(modifier = Modifier.padding(bottom = 10.dp))
+            DescriptionPaymentSection(
+                description = paymentDescription,
+                showDescriptionInput = showDescriptionInput,
+                onAddDescriptionClick = onAddDescriptionClick,
+                onDescriptionChange = onDescriptionChange,
+                modifier = Modifier.fillMaxWidth()
+            )
 
         }
     }
