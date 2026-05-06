@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.91:3000/\"")
+            buildConfigField("String", "BASE_URL", "\"http://192.168.1.92:3000/\"")
         }
         release {
             isMinifyEnabled = false
@@ -71,7 +71,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.datastore.preferences)
-    testImplementation(libs.junit)
+    implementation(libs.coil.compose)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -15,7 +15,10 @@ fun ProfileRoute(
 
     ProfileScreen(
         state = state,
-        onLogoutClick = onLogoutClick
+        onLogoutClick = {
+            viewModel.logout()
+            onLogoutClick()
+        }
     )
 
 }

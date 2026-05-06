@@ -20,6 +20,8 @@ fun PaymentRoute(
         onPaymentMethodSelected = viewModel::onPaymentMethodSelected,
         onAddDescriptionClick = viewModel::onAddDescriptionClick,
         onDescriptionChange = viewModel::onDescriptionChange,
+        generatePaymentLink = viewModel::generatePaymentLink,
+        onNewPaymentLink = viewModel::resetPayment
     )
 
 }

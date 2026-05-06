@@ -98,9 +98,10 @@ fun MainContainer(rootNavController: NavHostController) {
                 ProfileRoute(
                     onLogoutClick = {
                         rootNavController.navigate(Graph.AUTH) {
-                            popUpTo(Graph.MAIN) {
+                            popUpTo(0) {
                                 inclusive = true
                             }
+                            launchSingleTop = true
                         }
                     }
                 )

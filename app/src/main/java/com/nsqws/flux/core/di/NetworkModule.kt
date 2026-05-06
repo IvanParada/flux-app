@@ -12,6 +12,8 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
 import com.nsqws.flux.BuildConfig
 import com.nsqws.flux.core.data.network.AuthInterceptor
+import com.nsqws.flux.features.payment.data.remote.api.PaymentApi
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
 @Module
@@ -36,7 +38,7 @@ object NetworkModule {
             isLenient = true
         }
 
-        val contentType = MediaType.get("application/json")
+        val contentType = "application/json".toMediaType()
 
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
@@ -49,5 +51,11 @@ object NetworkModule {
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePaymentApi(retrofit: Retrofit): PaymentApi {
+        return retrofit.create(PaymentApi::class.java)
     }
 }

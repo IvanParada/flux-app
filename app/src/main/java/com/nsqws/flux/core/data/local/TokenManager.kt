@@ -16,18 +16,23 @@ private val Context.dataStore by preferencesDataStore(name = "flux_prefs")
 class TokenManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    val token: Flow<String?> = context.dataStore.data.map { it[TOKEN_KEY] }
+    private val tokenKey = stringPreferencesKey("auth_token")
+    private val userIdKey = stringPreferencesKey("user_id")
+    private val userRutKey = stringPreferencesKey("user_rut")
 
-    companion object {
-        private val TOKEN_KEY = stringPreferencesKey("auth_token")
+    val token: Flow<String?> = context.dataStore.data.map { it[tokenKey] }
+    val userId: Flow<String?> = context.dataStore.data.map { it[userIdKey] }
+    val userRut: Flow<String?> = context.dataStore.data.map { it[userRutKey] }
+
+    suspend fun saveSession(token: String, userId: String, userRut: String) {
+        context.dataStore.edit { prefs ->
+            prefs[tokenKey] = token
+            prefs[userIdKey] = userId
+            prefs[userRutKey] = userRut
+        }
     }
 
-    suspend fun saveToken(token: String) {
-        context.dataStore.edit { it[TOKEN_KEY] = token }
-    }
-
-
-    suspend fun clearToken() {
-        context.dataStore.edit { it.remove(TOKEN_KEY) }
+    suspend fun clearAll() {
+        context.dataStore.edit { it.clear() }
     }
 }

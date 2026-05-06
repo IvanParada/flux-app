@@ -14,8 +14,7 @@ abstract class PaymentModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun bindHomeRepository(
-        homeRepositoryImpl: PaymentRepositoryImpl
-
+    abstract fun bindPaymentRepository(
+        paymentRepositoryImpl: PaymentRepositoryImpl
     ): PaymentRepository
 }

@@ -1,5 +1,6 @@
 package com.nsqws.flux.features.auth.data.repository
 
+import android.util.Log
 import com.nsqws.flux.core.data.local.TokenManager
 import com.nsqws.flux.features.auth.data.remote.datasource.AuthRemoteDataSource
 import com.nsqws.flux.features.auth.data.remote.dto.request.ForgotPasswordRequest
@@ -75,11 +76,17 @@ class AuthRepositoryImpl @Inject constructor(
                 val authResponse = response.body()
 
                 if (authResponse != null) {
-                    tokenManager.saveToken(authResponse.accessToken)
-
+                    tokenManager.saveSession(
+                        token = authResponse.accessToken,
+                        userId = authResponse.user.id,
+                        userRut = authResponse.user.rut
+                    )
+                    Log.d("LoginDataUser", "${authResponse.user}")
                     Result.success(
                         AuthSession(
-                            accessToken = authResponse.accessToken
+                            accessToken = authResponse.accessToken,
+                            userId = authResponse.user.id,
+                            userRut = authResponse.user.rut
                         )
                     )
                 } else {

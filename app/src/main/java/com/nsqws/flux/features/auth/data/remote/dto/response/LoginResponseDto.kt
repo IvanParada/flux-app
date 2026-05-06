@@ -7,5 +7,15 @@ import kotlinx.serialization.Serializable
 data class LoginResponseDto(
     @SerialName("token")
     val accessToken: String,
+    @SerialName("user")
+    val user: UserDto,
 
+
+)
+
+@Serializable
+data class UserDto(
+    val id: String,
+    val email: String,
+    val rut: String
 )

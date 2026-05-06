@@ -7,5 +7,6 @@ data class PaymentState(
     val amount: Long = 0L,
     val selectedPaymentMethod: PaymentMethodEnum = PaymentMethodEnum.QrCode,
     val showDescriptionInput: Boolean = false,
-    val paymentDescription: String = ""
+    val paymentDescription: String = "",
+    val generatedUrl: String? = null,
 )
