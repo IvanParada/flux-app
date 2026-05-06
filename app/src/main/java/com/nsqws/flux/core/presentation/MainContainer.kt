@@ -1,9 +1,8 @@
 package com.nsqws.flux.core.presentation
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -13,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -37,11 +35,12 @@ fun MainContainer(rootNavController: NavHostController) {
     val appColor = MaterialTheme.colorScheme
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0),
         bottomBar = {
             NavigationBar(
                 containerColor = appColor.surface,
                 contentColor = appColor.primary,
-            ){
+            ) {
                 val navBackStackEntry by nestedNavController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
@@ -79,20 +78,33 @@ fun MainContainer(rootNavController: NavHostController) {
         NavHost(
             navController = nestedNavController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = innerPadding.calculateBottomPadding())
         ) {
-            composable(Screen.Home.route) { HomeRoute() }
-            composable(Screen.Ventas.route) { HistoryRoute() }
-            composable(Screen.Cobrar.route) { PaymentRoute() }
-            composable(Screen.Perfil.route) { ProfileRoute(
-                onLogoutClick = {
-                    rootNavController.navigate(Graph.AUTH) {
-                        popUpTo(Graph.MAIN) {
-                            inclusive = true
+            composable(Screen.Home.route) {
+                HomeRoute()
+            }
+
+            composable(Screen.Ventas.route) {
+                HistoryRoute()
+            }
+
+            composable(Screen.Cobrar.route) {
+                PaymentRoute()
+            }
+
+            composable(Screen.Perfil.route) {
+                ProfileRoute(
+                    onLogoutClick = {
+                        rootNavController.navigate(Graph.AUTH) {
+                            popUpTo(Graph.MAIN) {
+                                inclusive = true
+                            }
                         }
                     }
-                }
-            ) }
+                )
+            }
         }
     }
 }

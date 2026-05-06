@@ -13,6 +13,10 @@ fun PaymentRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
 
-    PaymentScreen(state = state)
+    PaymentScreen(
+        state = state,
+        onDigitClick = viewModel::onDigitClick,
+        onDeleteClick = viewModel::onDeleteClick,
+    )
 
 }
