@@ -54,34 +54,6 @@ fun PaymentScreen(
             Column(
                 modifier = Modifier.padding(horizontal = 15.dp)
             ) {
-//                AmountKeypad(
-//                    onDigitClick = onDigitClick,
-//                    onDeleteClick = onDeleteClick,
-//                )
-//
-//                PaymentMethodSelector(
-//                    onPaymentMethodSelected = onPaymentMethodSelected,
-//                    selectedMethod = state.selectedPaymentMethod
-//                )
-//
-//                Spacer(modifier = Modifier.padding(bottom = 15.dp))
-
-//                FluxButton(
-//                    onClick = {
-//                        generatePaymentLink()
-//                    },
-//                    isLoading = state.isLoading,
-//                    enabled = !state.isLoading,
-//                    textButton = if (state.selectedPaymentMethod == PaymentMethodEnum.QrCode)
-//                        "Generar Código QR"
-//                    else
-//                        "Generar Link de Pago",
-//                    icon = if (state.selectedPaymentMethod == PaymentMethodEnum.QrCode)
-//                        R.drawable.qr
-//                    else
-//                        R.drawable.link
-//                )
-
                 if (state.generatedUrl == null) {
                     AmountKeypad(
                         onDigitClick = onDigitClick,

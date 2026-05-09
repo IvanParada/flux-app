@@ -23,7 +23,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://192.168.1.92:3000/\"")
+            buildConfigField("String", "BASE_URL", "\"https://dominica-courtly-darcy.ngrok-free.dev/\"")
         }
         release {
             isMinifyEnabled = false
@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil.compose)
+    implementation(libs.socket.io.client)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

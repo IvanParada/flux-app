@@ -1,15 +1,20 @@
 package com.nsqws.flux.features.payment.data.repository
 import com.nsqws.flux.core.data.local.TokenManager
 import com.nsqws.flux.features.payment.data.remote.api.PaymentApi
+import com.nsqws.flux.features.payment.data.remote.datasource.SocketPaymentDataSource
 import com.nsqws.flux.features.payment.data.remote.dto.request.PaymentRequestDto
 import com.nsqws.flux.features.payment.domain.repository.PaymentRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import com.nsqws.flux.features.payment.domain.model.PaymentLink
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class PaymentRepositoryImpl @Inject constructor(
     private val api: PaymentApi,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManager,
+    private val socketDataSource: SocketPaymentDataSource
 ) : PaymentRepository {
 
     private fun getErrorMessage(response: retrofit2.Response<*>): String {
@@ -59,7 +64,14 @@ class PaymentRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun observeStatus(reference: String): Flow<String> = callbackFlow {
+        socketDataSource.startListening(reference) { status ->
+            trySend(status)
+        }
 
-
+        awaitClose {
+            socketDataSource.stopListening()
+        }
+    }
 
 }

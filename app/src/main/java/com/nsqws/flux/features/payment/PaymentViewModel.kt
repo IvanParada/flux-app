@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nsqws.flux.features.payment.domain.repository.PaymentRepository
+import com.nsqws.flux.features.payment.domain.usecase.ObservePaymentStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PaymentViewModel @Inject constructor(
-    private val repository: PaymentRepository
+    private val repository: PaymentRepository,
+    private val observePaymentStatusUseCase: ObservePaymentStatusUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow(PaymentState())
     val state = _state.asStateFlow()
@@ -57,13 +59,9 @@ class PaymentViewModel @Inject constructor(
     }
 
     fun generatePaymentLink() {
-        Log.d("DEBUG_PAYMENT", "1. Botón presionado. Monto: ${_state.value.amount}")
         val currentAmount = _state.value.amount
 
-        if (currentAmount <= 0L){
-            Log.d("DEBUG_PAYMENT", "2. Abortado: Monto es 0")
-            return
-        }
+        if (currentAmount <= 0L) return
 
         val currentDescription = _state.value.paymentDescription.ifEmpty { "Cobro" }
 
@@ -71,29 +69,30 @@ class PaymentViewModel @Inject constructor(
             it.copy(
                 isLoading = true,
                 error = null,
-                generatedUrl = null
+                generatedUrl = null,
+                isSuccess = false
             )
         }
-        Log.d("DEBUG_PAYMENT", "3. Estado actualizado a isLoading = true")
+
         viewModelScope.launch {
-            Log.d("DEBUG_PAYMENT", "4. Corrutina iniciada")
             repository.createPaymentLink(
                 amount = currentAmount.toInt(),
                 description = currentDescription
             ).onSuccess { paymentLink ->
-                Log.d("DEBUG_PAYMENT", "¡LLEGÓ! URL: ${paymentLink.url}")
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        isSuccess = true,
-                        generatedUrl = paymentLink.url
+                        generatedUrl = paymentLink.url,
+                        isSuccess = false
                     )
                 }
+
+                trackPaymentStatus(paymentLink.reference)
+
             }.onFailure { error ->
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        isSuccess = false,
                         error = error.message ?: "Error de conexión con el servidor"
                     )
                 }
@@ -101,6 +100,36 @@ class PaymentViewModel @Inject constructor(
         }
     }
 
+    private fun trackPaymentStatus(reference: String) {
+        viewModelScope.launch {
+            observePaymentStatusUseCase(reference).collect { status ->
+                Log.d("SOCKET_DEBUG", "Nuevo estado recibido: $status")
+
+                when (status) {
+                    "approved" -> {
+                        _state.update {
+                            it.copy(
+                                isSuccess = true,
+                                isLoading = false,
+                                generatedUrl = null
+                            )
+                        }
+                    }
+                    "rejected" -> {
+                        _state.update {
+                            it.copy(
+                                error = "Pago rechazado",
+                                isSuccess = false,
+                                isLoading = false
+                            )
+                        }
+                    }
+                    "in_process" -> {
+                    }
+                }
+            }
+        }
+    }
     fun resetPayment() {
         _state.update { it.copy(
             generatedUrl = null,

@@ -5,10 +5,12 @@ import com.nsqws.flux.features.auth.data.remote.dto.request.LoginRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.RegisterRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.ResendCodeRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.ResetPasswordRequest
+import com.nsqws.flux.features.auth.data.remote.dto.request.UpdateBankDataRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyResetCodeRequest
 import com.nsqws.flux.features.auth.data.remote.dto.response.ForgotPasswordResponseDto
 import com.nsqws.flux.features.auth.data.remote.dto.response.LoginResponseDto
+import com.nsqws.flux.features.auth.data.remote.dto.response.MessageResponse
 import com.nsqws.flux.features.auth.data.remote.dto.response.RegisterResponseDto
 import com.nsqws.flux.features.auth.data.remote.dto.response.ResendCodeResponseDto
 import com.nsqws.flux.features.auth.data.remote.dto.response.ResetPasswordResponseDto
@@ -16,6 +18,8 @@ import com.nsqws.flux.features.auth.data.remote.dto.response.VerifyResetCodeResp
 import com.nsqws.flux.features.auth.data.remote.dto.response.VerifyResponseDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface AuthApi {
@@ -53,4 +57,9 @@ interface AuthApi {
     suspend fun resendCode(
         @Body request: ResendCodeRequest
     ): Response<ResendCodeResponseDto>
+
+    @PATCH("auth/bank-data")
+    suspend fun updateBankData(
+        @Body request: UpdateBankDataRequest
+    ): Response<MessageResponse>
 }

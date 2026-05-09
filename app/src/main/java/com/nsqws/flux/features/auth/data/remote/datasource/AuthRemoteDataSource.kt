@@ -7,9 +7,11 @@ import com.nsqws.flux.features.auth.data.remote.dto.request.LoginRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.RegisterRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.ResendCodeRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.ResetPasswordRequest
+import com.nsqws.flux.features.auth.data.remote.dto.request.UpdateBankDataRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyResetCodeRequest
 import com.nsqws.flux.features.auth.data.remote.dto.response.ForgotPasswordResponseDto
+import com.nsqws.flux.features.auth.data.remote.dto.response.MessageResponse
 import com.nsqws.flux.features.auth.data.remote.dto.response.RegisterResponseDto
 import com.nsqws.flux.features.auth.data.remote.dto.response.ResendCodeResponseDto
 import com.nsqws.flux.features.auth.data.remote.dto.response.ResetPasswordResponseDto
@@ -46,5 +48,9 @@ class AuthRemoteDataSource @Inject constructor(
 
     suspend fun resendCode(request: ResendCodeRequest): Response<ResendCodeResponseDto> {
         return authApi.resendCode(request)
+    }
+
+    suspend fun updateBankData(request: UpdateBankDataRequest): Response<MessageResponse> {
+        return authApi.updateBankData(request)
     }
 }
