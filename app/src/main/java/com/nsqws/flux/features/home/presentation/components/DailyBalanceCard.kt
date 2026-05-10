@@ -1,7 +1,6 @@
 package com.nsqws.flux.features.home.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -91,7 +91,11 @@ fun DailyBalanceCard(
                     }
                 }
             }
-            HorizontalDivider(modifier = Modifier.padding(vertical = 20.dp), color = textColor.secondary)
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 20.dp),
+                thickness = DividerDefaults.Thickness,
+                color = MaterialTheme.colorScheme.secondary.copy(alpha = .1f)
+            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
@@ -101,7 +105,11 @@ fun DailyBalanceCard(
                     title = "Ingresos hoy",
                     amount = "$625.000"
                 )
-                VerticalDivider(modifier = Modifier.height(35.dp), color = textColor.secondary)
+                VerticalDivider(
+                    modifier = Modifier.height(35.dp),
+                    thickness = DividerDefaults.Thickness,
+                    color = MaterialTheme.colorScheme.secondary.copy(alpha = .1f)
+                )
                 BalanceMetric(
                     title = "Egresos hoy",
                     amount = "$28.900"

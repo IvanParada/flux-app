@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -26,12 +24,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.features.payment.PaymentMethodEnum
 import com.nsqws.flux.features.payment.PaymentState
 import coil.compose.AsyncImage
+import com.nsqws.flux.R
 
 @Composable
 fun ResultSection(
@@ -93,7 +93,10 @@ fun ResultSection(
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
-                    Icon(Icons.Default.Share, contentDescription = null)
+                    Icon(
+                        painter = painterResource(R.drawable.send_diagonal_icon),
+                        contentDescription = null
+                    )
                     Spacer(Modifier.width(8.dp))
                     Text("Compartir")
                 }
