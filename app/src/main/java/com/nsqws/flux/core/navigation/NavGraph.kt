@@ -18,4 +18,6 @@ sealed class Screen(val route: String, val title: String? = null, val iconRes: I
     object Cobrar : Screen("cobrar_view", "Pago", R.drawable.qr)
     object Ventas : Screen("ventas_view", "Ventas", R.drawable.document)
     object Perfil : Screen("perfil_view", "Perfil", R.drawable.user)
+
+    object BankAccount : Screen("bank_account_view")
 }

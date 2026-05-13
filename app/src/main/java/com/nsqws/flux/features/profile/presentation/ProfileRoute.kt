@@ -8,6 +8,7 @@ import com.nsqws.flux.features.profile.ProfileViewModel
 
 @Composable
 fun ProfileRoute(
+    onBankAccountClick: () -> Unit,
     onLogoutClick: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
@@ -15,10 +16,10 @@ fun ProfileRoute(
 
     ProfileScreen(
         state = state,
+        onBankAccountClick = onBankAccountClick,
         onLogoutClick = {
             viewModel.logout()
             onLogoutClick()
         }
     )
-
 }

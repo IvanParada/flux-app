@@ -19,7 +19,8 @@ import com.nsqws.flux.ui.theme.AppWarningColor
 
 @Composable
 fun SettingsCard(
-    onLogoutClick: () -> Unit
+    onBankAccountClick: () -> Unit,
+    onLogoutClick: () -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -62,7 +63,7 @@ fun SettingsCard(
                 subtitle = "Cuenta para recibir tus pagos",
                 iconBackground = AppSuccessColor.copy(alpha = .1f),
                 iconTint = AppSuccessColor,
-                onClick = { }
+                onClick = onBankAccountClick
             )
 
             HorizontalDivider(

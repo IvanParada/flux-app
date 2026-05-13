@@ -32,6 +32,7 @@ import com.nsqws.flux.features.profile.presentation.components.TributaryDataRow
 @Composable
 fun ProfileScreen(
     state: ProfileState,
+    onBankAccountClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     val typography = MaterialTheme.typography
@@ -145,6 +146,7 @@ fun ProfileScreen(
                 )
 
                 SettingsCard(
+                    onBankAccountClick = onBankAccountClick,
                     onLogoutClick = onLogoutClick
                 )
             }
