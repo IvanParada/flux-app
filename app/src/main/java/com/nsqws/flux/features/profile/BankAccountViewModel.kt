@@ -102,14 +102,27 @@ class BankAccountViewModel @Inject constructor(
         _state.update { it.copy(isSaving = true, error = null) }
 
         viewModelScope.launch {
-            // repository.updateBankData(...)
-            kotlinx.coroutines.delay(1000)
-
-            _state.update {
-                it.copy(
-                    isSaving = false,
-                    isSuccess = true
-                )
+            repository.updateBankData(
+                bankHolderId = currentState.rut,
+                bankNumber = currentState.accountNumber,
+                bankType = currentState.selectedAccountTypeId,
+                bankInstitutionId = currentState.selectedBankId
+            ).onSuccess {
+                _state.update {
+                    it.copy(
+                        isSaving = false,
+                        isSuccess = true,
+                        error = null
+                    )
+                }
+            }.onFailure { error ->
+                _state.update {
+                    it.copy(
+                        isSaving = false,
+                        isSuccess = false,
+                        error = error.message ?: "Error al guardar datos bancarios"
+                    )
+                }
             }
         }
     }

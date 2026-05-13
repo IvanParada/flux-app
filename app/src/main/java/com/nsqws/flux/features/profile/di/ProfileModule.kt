@@ -14,8 +14,7 @@ abstract class ProfileModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun bindHomeRepository(
-        homeRepositoryImpl: ProfileRepositoryImpl
-
+    abstract fun bindProfileRepository(
+        profileRepositoryImpl: ProfileRepositoryImpl
     ): ProfileRepository
 }

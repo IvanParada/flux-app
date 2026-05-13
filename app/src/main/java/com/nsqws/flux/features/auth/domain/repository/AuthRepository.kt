@@ -12,11 +12,6 @@ interface AuthRepository {
     suspend fun verifyResetCode(email: String, code: String): Result<AuthMessage>
     suspend fun resetPassword(email: String, code: String, newPassword: String): Result<AuthMessage>
     suspend fun resendCode(email: String): Result<AuthMessage>
-    suspend fun updateBankData(
-        bankHolderId: String,
-        bankNumber: String,
-        bankType: String,
-        bankInstitutionId: String
-    ): Result<AuthMessage>
+
 
 }

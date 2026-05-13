@@ -235,38 +235,4 @@ class AuthRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
-
-    override suspend fun updateBankData(
-        bankHolderId: String,
-        bankNumber: String,
-        bankType: String,
-        bankInstitutionId: String
-    ): Result<AuthMessage> {
-        return try {
-            val response = remoteDataSource.updateBankData(
-                UpdateBankDataRequest(
-                    bankHolderId = bankHolderId,
-                    bankNumber = bankNumber,
-                    bankType = bankType,
-                    bankInstitutionId = bankInstitutionId
-                )
-            )
-
-            if (response.isSuccessful) {
-                val authResponse = response.body()
-
-                if (authResponse != null) {
-                    Result.success(
-                        AuthMessage(message = authResponse.message)
-                    )
-                } else {
-                    Result.failure(Exception("Cuerpo de respuesta vacío"))
-                }
-            } else {
-                Result.failure(Exception(getErrorMessage(response)))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
 }

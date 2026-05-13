@@ -1,7 +1,7 @@
 package com.nsqws.flux.features.profile
 
-import com.nsqws.flux.features.profile.data.remote.dto.AccountTypeDTO
-import com.nsqws.flux.features.profile.data.remote.dto.BankItemDTO
+import com.nsqws.flux.features.profile.data.remote.dto.response.AccountTypeDTO
+import com.nsqws.flux.features.profile.data.remote.dto.response.BankItemDTO
 
 data class BankAccountState (
     val banks: List<BankItemDTO> = emptyList(),

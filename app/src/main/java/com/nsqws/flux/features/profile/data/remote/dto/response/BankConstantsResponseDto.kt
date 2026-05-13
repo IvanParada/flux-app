@@ -1,4 +1,4 @@
-package com.nsqws.flux.features.profile.data.remote.dto
+package com.nsqws.flux.features.profile.data.remote.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
