@@ -10,15 +10,15 @@ import com.nsqws.flux.features.profile.ProfileViewModel
 fun ProfileRoute(
     onBankAccountClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    viewModel: ProfileViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by profileViewModel.state.collectAsStateWithLifecycle()
 
     ProfileScreen(
         state = state,
         onBankAccountClick = onBankAccountClick,
         onLogoutClick = {
-            viewModel.logout()
+            profileViewModel.logout()
             onLogoutClick()
         }
     )

@@ -13,6 +13,7 @@ import javax.inject.Singleton
 import com.nsqws.flux.BuildConfig
 import com.nsqws.flux.core.data.network.AuthInterceptor
 import com.nsqws.flux.features.payment.data.remote.api.PaymentApi
+import com.nsqws.flux.features.profile.data.remote.api.ProfileApi
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 
@@ -57,5 +58,11 @@ object NetworkModule {
     @Singleton
     fun providePaymentApi(retrofit: Retrofit): PaymentApi {
         return retrofit.create(PaymentApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileApi(retrofit: Retrofit): ProfileApi {
+        return retrofit.create(ProfileApi::class.java)
     }
 }

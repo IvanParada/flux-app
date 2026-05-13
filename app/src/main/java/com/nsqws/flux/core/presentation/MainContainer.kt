@@ -26,6 +26,7 @@ import com.nsqws.flux.core.navigation.Screen
 import com.nsqws.flux.features.history.presentation.HistoryRoute
 import com.nsqws.flux.features.home.presentation.HomeRoute
 import com.nsqws.flux.features.payment.presentation.PaymentRoute
+import com.nsqws.flux.features.profile.presentation.BankAccountRoute
 import com.nsqws.flux.features.profile.presentation.BankAccountScreen
 import com.nsqws.flux.features.profile.presentation.ProfileRoute
 
@@ -112,7 +113,7 @@ fun MainContainer(rootNavController: NavHostController) {
             }
 
             composable(Screen.BankAccount.route) {
-                BankAccountScreen(
+                BankAccountRoute(
                     onBackClick = {
                         nestedNavController.popBackStack()
                     }

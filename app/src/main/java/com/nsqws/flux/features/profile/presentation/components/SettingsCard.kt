@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.R
+import com.nsqws.flux.features.profile.ProfileState
 import com.nsqws.flux.ui.theme.AppCianColor
 import com.nsqws.flux.ui.theme.AppErrorColor
 import com.nsqws.flux.ui.theme.AppInfoColor
@@ -36,6 +37,7 @@ fun SettingsCard(
                 iconBackground = AppCianColor.copy(alpha = .1f),
                 iconTint = AppCianColor,
                 onClick = { }
+
             )
 
             HorizontalDivider(
