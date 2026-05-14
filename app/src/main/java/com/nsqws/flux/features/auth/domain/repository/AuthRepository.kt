@@ -1,6 +1,5 @@
 package com.nsqws.flux.features.auth.domain.repository
 
-import com.nsqws.flux.features.auth.data.remote.dto.request.UpdateBankDataRequest
 import com.nsqws.flux.features.auth.domain.model.AuthMessage
 import com.nsqws.flux.features.auth.domain.model.AuthSession
 

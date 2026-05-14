@@ -8,10 +8,8 @@ import com.nsqws.flux.features.auth.data.remote.dto.request.LoginRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.RegisterRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.ResendCodeRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.ResetPasswordRequest
-import com.nsqws.flux.features.auth.data.remote.dto.request.UpdateBankDataRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyRequest
 import com.nsqws.flux.features.auth.data.remote.dto.request.VerifyResetCodeRequest
-import com.nsqws.flux.features.auth.data.remote.dto.response.MessageResponse
 import com.nsqws.flux.features.auth.domain.model.AuthMessage
 import com.nsqws.flux.features.auth.domain.model.AuthSession
 import com.nsqws.flux.features.auth.domain.repository.AuthRepository
