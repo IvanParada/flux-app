@@ -1,17 +1,17 @@
 package com.nsqws.flux.features.payment.presentation
 
 import android.content.Intent
-import android.widget.Space
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nsqws.flux.core.presentation.FluxButton
 import com.nsqws.flux.features.payment.PaymentMethodEnum
@@ -21,6 +21,7 @@ import com.nsqws.flux.features.payment.presentation.components.AmountKeypad
 import com.nsqws.flux.features.payment.presentation.components.PaymentMethodSelector
 import com.nsqws.flux.R
 import com.nsqws.flux.features.payment.presentation.components.ResultSection
+import androidx.core.net.toUri
 
 @Composable
 fun PaymentScreen(
@@ -67,6 +68,16 @@ fun PaymentScreen(
 
                     Spacer(modifier = Modifier.padding(bottom = 15.dp))
 
+                    if (state.error != null) {
+                        Text(
+                            text = state.error,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
+
+
                     FluxButton(
                         onClick = generatePaymentLink,
                         isLoading = state.isLoading,
@@ -80,12 +91,13 @@ fun PaymentScreen(
                     ResultSection(
                         state = state,
                         onShareClick = {
-                            val intent = Intent().apply {
+                            val sendIntent: Intent = Intent().apply {
                                 action = Intent.ACTION_SEND
-                                putExtra(Intent.EXTRA_TEXT, "Paga aquí: ${state.generatedUrl}")
+                                putExtra(Intent.EXTRA_TEXT, state.generatedUrl)
                                 type = "text/plain"
                             }
-                            context.startActivity(Intent.createChooser(intent, null))
+                            val shareIntent = Intent.createChooser(sendIntent, "Compartir link de pago")
+                            context.startActivity(shareIntent)
                         },
                         onNewPaymentClick = onNewPaymentLink
                     )

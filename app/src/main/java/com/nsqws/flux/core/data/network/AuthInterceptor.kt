@@ -16,8 +16,9 @@ class AuthInterceptor @Inject constructor(
         val request = chain.request().newBuilder()
 
         token?.let {
+            android.util.Log.d("AUTH_DEBUG", "Token enviado: Bearer $it")
             request.addHeader("Authorization", "Bearer $it")
-        }
+        } ?: android.util.Log.e("AUTH_DEBUG", "¡OJO! El token es NULO en el interceptor")
 
         return chain.proceed(request.build())
     }
